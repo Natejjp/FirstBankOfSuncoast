@@ -70,99 +70,104 @@ namespace FirstBankOfSuncoast
                 Console.WriteLine("What would you like to do? (D)eposit, (W)ithdraw, (B)alance, (T)ransaction List, or (Q)uit ");
                 var choiceAction = Console.ReadLine().ToUpper();
 
-                if (choiceAction == "Q")
+                switch (choiceAction)
                 {
-                    keepGoing = false;
+                    case "Q":
+
+                        keepGoing = false;
+
+                        break;
+
+                    case "D":
+
+                        Console.WriteLine("You chose to Deposit some money! ");
+                        var choiceAccount0 = PromptForString("Which account, Checkings or Savings? ");
+
+                        if (choiceAccount0 == "S")
+                        {
+                            moneySavings.TotalAmount = PromptForInteger("How much do you want to deposit in Savings? ");
+                            moneySavings.TransactionType = ("Deposit");
+                            moneySavings.AccountType = ("Savings");
+
+                            savingsTransactions.Add(moneySavings);
+                            allTransactions.Add(moneySavings);
+                        }
+                        else if (choiceAccount0 == "C")
+                        {
+                            Console.WriteLine("You chose to Deposit some money to Checkings! ");
+                            moneyCheckings.TotalAmount = PromptForInteger("How much do you want to deposit? ");
+                            moneyCheckings.TransactionType = ("Deposit");
+                            moneyCheckings.AccountType = ("Checkings");
+
+                            allTransactions.Add(moneyCheckings);
+                            checkingsTransactions.Add(moneyCheckings);
+                        }
+
+                        break;
+
+                    case "W":
+
+                        Console.WriteLine("Which account would you like to interact with (S)avings or (C)heckings");
+                        var choiceAccount1 = Console.ReadLine().ToUpper();
+                        if (choiceAccount1 == "S")
+                        {
+                            Console.WriteLine("You chose to Withdraw some money from Savings! ");
+                            moneySavings.TotalAmount = PromptForInteger("How much do you want to Withdraw? ");
+                            moneySavings.AccountType = ("Savings");
+                            moneySavings.TransactionType = ("Withdraw");
+
+                            allTransactions.Remove(moneySavings);
+                            savingsTransactions.Remove(moneySavings);
+                        }
+                        else if (choiceAccount1 == "C")
+                        {
+                            Console.WriteLine("You chose to Withdraw some money from Checkings! ");
+                            moneyCheckings.TotalAmount = PromptForInteger("How much do you want to Withdraw? ");
+                            moneyCheckings.AccountType = ("Checkings");
+                            moneyCheckings.TransactionType = ("Withdraw");
+
+                            allTransactions.Remove(moneyCheckings);
+                            checkingsTransactions.Remove(moneyCheckings);
+                        }
+                        break;
+
+                    case "B":
+
+                        Console.WriteLine("Which account would you like to interact with (S)avings or (C)heckings");
+                        var choiceAccount2 = Console.ReadLine().ToUpper();
+                        if (choiceAccount2 == "S")
+                        {
+                            var foundDeposits = savingsTransactions.Where(s => s.TransactionType == "Deposit").Sum(s => s.TotalAmount);
+                            var foundWithdraw = savingsTransactions.Where(s => s.TransactionType == "Withdraw").Sum(s => s.TotalAmount);
+                            var savingsBalance = $"{foundDeposits - foundWithdraw}";
+                            Console.WriteLine($"You have {savingsBalance} in Savings");
+
+                        }
+                        else if (choiceAccount2 == "C")
+                        {
+
+                            var foundDeposits = checkingsTransactions.Where(s => s.TransactionType == "Deposit").Sum(s => s.TotalAmount);
+                            var foundWithdraw = checkingsTransactions.Where(s => s.TransactionType == "Withdraw").Sum(s => s.TotalAmount);
+                            var checkingsBalance = $"{foundDeposits - foundWithdraw}";
+                            Console.WriteLine($"You have {checkingsBalance} in Checkings");
+
+
+                        }
+                        break;
+
+                    case "T":
+                        {
+
+                        }
+                        break;
+
+
+
                 }
-
-                else if (choiceAction == "D")
-                {
-                    Console.WriteLine("You chose to Deposit some money! ");
-                    moneySavings.TransactionType = "Deposit";
-                    moneySavings.AccountType = PromptForString("Which account, Checkings or Savings? ");
-
-                    if (moneySavings.AccountType[0] == 'S')
-                    {
-                        moneySavings.TotalAmount = PromptForInteger("How much do you want to deposit in Savings? ");
-                        savingsTransactions.Add(moneySavings);
-                        allTransactions.Add(moneySavings);
-                    }
-                    else if (moneySavings.AccountType[0] == 'C')
-                    {
-                        Console.WriteLine("You chose to Deposit some money to Checkings! ");
-                        moneyCheckings.TotalAmount = PromptForInteger("How much do you want to deposit? ");
-                        moneyCheckings.AccountType = ("Checkings");
-                        moneyCheckings.TransactionType = ("Deposit");
-
-                        allTransactions.Add(moneyCheckings);
-                        checkingsTransactions.Add(moneyCheckings);
-                    }
-
-                }
-
-                else if (choiceAction == "W")
-                {
-                    Console.WriteLine("Which account would you like to interact with (S)avings or (C)heckings");
-                    var choiceAccount = Console.ReadLine().ToUpper();
-                    if (choiceAccount == "S")
-                    {
-                        Console.WriteLine("You chose to Withdraw some money from Savings! ");
-                        moneySavings.TotalAmount = PromptForInteger("How much do you want to Withdraw? ");
-                        moneySavings.AccountType = ("Savings");
-                        moneySavings.TransactionType = ("Withdraw");
-
-                        allTransactions.Remove(moneySavings);
-                        savingsTransactions.Remove(moneySavings);
-                    }
-                    else if (choiceAccount == "C")
-                    {
-                        Console.WriteLine("You chose to Withdraw some money from Checkings! ");
-                        moneyCheckings.TotalAmount = PromptForInteger("How much do you want to Withdraw? ");
-                        moneyCheckings.AccountType = ("Checkings");
-                        moneyCheckings.TransactionType = ("Withdraw");
-
-                        allTransactions.Remove(moneyCheckings);
-                        checkingsTransactions.Remove(moneyCheckings);
-                    }
-                }
-
-                else if (choiceAction == "B")
-                {
-                    Console.WriteLine("Which account would you like to interact with (S)avings or (C)heckings");
-                    var choiceAccount = Console.ReadLine().ToUpper();
-                    if (choiceAccount == "S")
-                    {
-                        var foundDeposits = savingsTransactions.Where(s => s.TransactionType == "Deposit").Sum(s => s.TotalAmount);
-                        var foundWithdraw = savingsTransactions.Where(s => s.TransactionType == "Withdraw").Sum(s => s.TotalAmount);
-
-                        Console.WriteLine($"You have {foundDeposits - foundWithdraw} in Savings");
-
-                    }
-                    else if (choiceAccount == "C")
-                    {
-
-                        var foundDeposits = checkingsTransactions.Where(s => s.TransactionType == "Deposit").Sum(s => s.TotalAmount);
-                        var foundWithdraw = checkingsTransactions.Where(s => s.TransactionType == "Withdraw").Sum(s => s.TotalAmount);
-                        var checkingsBalance = $"{foundDeposits - foundWithdraw}";
-                        Console.WriteLine($"You have {foundDeposits - foundWithdraw} in Checkings");
-
-
-                    }
-                }
-
-                else if (choiceAction == "T")
-                {
-
-                }
-
-                else
-                {
-
-                }
-
             }
         }
     }
+
 }
 
 
