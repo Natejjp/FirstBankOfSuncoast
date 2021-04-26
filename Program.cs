@@ -54,13 +54,16 @@ namespace FirstBankOfSuncoast
         static void Main(string[] args)
         {
             var allTransactions = new List<Transaction>();
-            // if (File.Exists("allTransactions.csv"))
-            // {
-            //     // var fileReader = new StreamReader("allTransactions.csv");
-            //     // var csvReader = new CsvReader(fileReader, CultureInfo.InvariantCulture);
-            //     // allTransactions = csvReader.GetRecord<Transaction>().ToList();
-            //     // fileReader.Close();
-            // }
+            if (File.Exists("allTransactions.csv"))
+            {
+                var fileReader = new StreamReader("allTransactions.csv");
+                var csvReader = new CsvReader(fileReader, CultureInfo.InvariantCulture);
+                var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+                {
+                    HasHeaderRecord = true,
+                };
+                allTransactions = csvReader.GetRecords<Transaction>().ToList();
+            }
 
             var keepGoing = true;
             DisplayGreeting();
@@ -200,6 +203,9 @@ namespace FirstBankOfSuncoast
                         break;
 
                     case "T":
+                        var transactionChoice = PromptForString("Would you like to view your transactin list for your (S)avings Account, (C)heckings Account, or All (T)ransactions? ");
+                        var filteredTransactions = allTransactions.Where(transaction => transaction.AccountType == transactionChoice);
+
                         foreach (var transaction in allTransactions)
                         {
                             Console.WriteLine($"{transaction.TotalAmount}");
