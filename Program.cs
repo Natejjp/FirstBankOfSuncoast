@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Globalization;
 using CsvHelper;
+using CsvHelper.Configuration;
 
 namespace FirstBankOfSuncoast
 {
@@ -53,6 +54,13 @@ namespace FirstBankOfSuncoast
         static void Main(string[] args)
         {
             var allTransactions = new List<Transaction>();
+            // if (File.Exists("allTransactions.csv"))
+            // {
+            //     // var fileReader = new StreamReader("allTransactions.csv");
+            //     // var csvReader = new CsvReader(fileReader, CultureInfo.InvariantCulture);
+            //     // allTransactions = csvReader.GetRecord<Transaction>().ToList();
+            //     // fileReader.Close();
+            // }
 
             var keepGoing = true;
             DisplayGreeting();
@@ -203,7 +211,7 @@ namespace FirstBankOfSuncoast
                         break;
                 }
             }
-            var fileWriter = new StreamWriter("bank.csv");
+            var fileWriter = new StreamWriter("allTransactions.csv");
             var csvWriter = new CsvWriter(fileWriter, CultureInfo.InvariantCulture);
             csvWriter.WriteRecords(allTransactions);
             fileWriter.Close();
