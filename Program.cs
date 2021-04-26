@@ -203,15 +203,22 @@ namespace FirstBankOfSuncoast
                         break;
 
                     case "T":
-                        var transactionChoice = PromptForString("Would you like to view your transactin list for your (S)avings Account, (C)heckings Account, or All (T)ransactions? ");
-                        var filteredTransactions = allTransactions.Where(transaction => transaction.AccountType == transactionChoice);
-
-                        foreach (var transaction in allTransactions)
+                        var choiceAccount3 = PromptForString("Which account would you like to interact with (S)avings or (C)heckings? or (A)ll Transactions?");
+                        if (choiceAccount3 == "S")
                         {
-                            Console.WriteLine($"{transaction.TotalAmount}");
-                            Console.WriteLine($"{transaction.TransactionType}");
-                            Console.WriteLine($"{transaction.AccountType}");
-                            Console.WriteLine($"{transaction.TimeOfTransaction}");
+                            var savingsTransaction = allTransactions.Where(s => s.AccountType == "Savings");
+                            foreach (var transaction in savingsTransaction)
+                            {
+                                Console.WriteLine($"{transaction.TotalAmount} - {transaction.TransactionType}");
+                            }
+                        }
+                        else if (choiceAccount3 == "C")
+                        {
+                            var checkingsTransaction = allTransactions.Where(s => s.AccountType == "Checkings");
+                            foreach (var transaction in checkingsTransaction)
+                            {
+                                Console.WriteLine($"{transaction.TotalAmount} - {transaction.TransactionType}");
+                            }
                         }
 
                         break;
