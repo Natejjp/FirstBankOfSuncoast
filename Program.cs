@@ -60,9 +60,9 @@ namespace FirstBankOfSuncoast
 
                 Console.WriteLine();
                 Console.WriteLine("What would you like to do? (D)eposit, (W)ithdraw, (B)alance, (T)ransaction List, or (Q)uit ");
-                var choiceAction = Console.ReadLine().ToUpper();
+                var choice = Console.ReadLine().ToUpper();
 
-                switch (choiceAction)
+                switch (choice)
                 {
                     case "Q":
 
@@ -73,31 +73,51 @@ namespace FirstBankOfSuncoast
                     case "D":
 
                         Console.WriteLine("You chose to Deposit some money! ");
-                        var choiceAccount0 = PromptForString("Which account, Checkings or Savings? ");
+                        var choiceAccount0 = PromptForString("Which account would you like to interact with (S)avings or (C)heckings?");
 
                         if (choiceAccount0 == "S")
                         {
+                            Console.WriteLine("You chose to Deposit money to Savings! ");
                             money.TotalAmount = PromptForInteger("How much do you want to deposit in Savings? ");
                             money.TransactionType = ("Deposit");
                             money.AccountType = ("Savings");
+                            money.TimeOfTransaction = DateTime.Now;
 
-                            allTransactions.Add(money);
+                            if (money.TotalAmount <= 0)
+                            {
+                                Console.WriteLine("You are not able to deposit a negative amount!");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"You have depositted {money.TotalAmount} in your savings account!");
+                                allTransactions.Add(money);
+                            }
+
                         }
                         else if (choiceAccount0 == "C")
                         {
                             Console.WriteLine("You chose to Deposit some money to Checkings! ");
-                            money.TotalAmount = PromptForInteger("How much do you want to deposit? ");
+                            money.TotalAmount = PromptForInteger("How much do you want to deposit in Checkings? ");
                             money.TransactionType = ("Deposit");
                             money.AccountType = ("Checkings");
+                            money.TimeOfTransaction = DateTime.Now;
 
-                            allTransactions.Add(money);
+                            if (money.TotalAmount <= 0)
+                            {
+                                Console.WriteLine("You are not able to deposit a negative amount!");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"You have depositted {money.TotalAmount} in your checkings account!");
+                                allTransactions.Add(money);
+                            }
                         }
 
                         break;
 
                     case "W":
 
-                        Console.WriteLine("Which account would you like to interact with (S)avings or (C)heckings");
+                        Console.WriteLine("Which account would you like to interact with (S)avings or (C)heckings?");
                         var choiceAccount1 = Console.ReadLine().ToUpper();
                         if (choiceAccount1 == "S")
                         {
@@ -105,8 +125,21 @@ namespace FirstBankOfSuncoast
                             money.TotalAmount = PromptForInteger("How much do you want to Withdraw? ");
                             money.AccountType = ("Savings");
                             money.TransactionType = ("Withdraw");
+                            money.TimeOfTransaction = DateTime.Now;
 
-                            allTransactions.Add(money);
+                            var foundDeposits = allTransactions.Where(s => s.AccountType == "Savings").Where(s => s.TransactionType == "Deposit").Sum(s => s.TotalAmount);
+                            var foundWithdraw = allTransactions.Where(s => s.AccountType == "Savings").Where(s => s.TransactionType == "Withdraw").Sum(s => s.TotalAmount);
+
+                            if (money.TotalAmount > foundDeposits - foundWithdraw)
+                            {
+                                Console.WriteLine($"You broke! No money in your Savings Account");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"You have withdrew {money.TotalAmount} from your savings account!");
+                                allTransactions.Add(money);
+                            }
+
                         }
                         else if (choiceAccount1 == "C")
                         {
@@ -114,9 +147,22 @@ namespace FirstBankOfSuncoast
                             money.TotalAmount = PromptForInteger("How much do you want to Withdraw? ");
                             money.AccountType = ("Checkings");
                             money.TransactionType = ("Withdraw");
+                            money.TimeOfTransaction = DateTime.Now;
 
-                            allTransactions.Add(money);
+                            var foundDeposits = allTransactions.Where(s => s.AccountType == "Checkings").Where(s => s.TransactionType == "Deposit").Sum(s => s.TotalAmount);
+                            var foundWithdraw = allTransactions.Where(s => s.AccountType == "Checkings").Where(s => s.TransactionType == "Withdraw").Sum(s => s.TotalAmount);
+
+                            if (money.TotalAmount > foundDeposits - foundWithdraw)
+                            {
+                                Console.WriteLine($"You broke! No money in your Checking Account");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"You have withdrew {money.TotalAmount} from your checkings account!");
+                                allTransactions.Add(money);
+                            }
                         }
+
                         break;
 
                     case "B":
@@ -140,6 +186,17 @@ namespace FirstBankOfSuncoast
                             Console.WriteLine($"You have {checkingsBalance} in Checkings");
 
                         }
+                        break;
+
+                    case "T":
+                        foreach (var transaction in allTransactions)
+                        {
+                            Console.WriteLine($"{transaction.TotalAmount}");
+                            Console.WriteLine($"{transaction.TransactionType}");
+                            Console.WriteLine($"{transaction.AccountType}");
+                            Console.WriteLine($"{transaction.TimeOfTransaction}");
+                        }
+
                         break;
 
 
